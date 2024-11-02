@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/f3v3g4/sonarqube-infra.git'  # Cambia esto a tu repositorio
+    targetRevision: HEAD
+    path: 'argocd'  # Cambia esto si cambias la estructura
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default  # Cambia si necesitas otro namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
