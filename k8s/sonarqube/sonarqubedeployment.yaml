@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonarqube
+  labels:
+    app: sonarqube
 spec:
   replicas: 1
   selector:
@@ -17,18 +19,17 @@ spec:
         image: sonarqube:latest
         env:
         - name: SONAR_JDBC_URL
-          value: jdbc:postgresql://postgres:5432/sonar
+          value: jdbc:postgresql://sonarqube-postgres:5432/sonar
         - name: SONAR_JDBC_USERNAME
           value: sonar
         - name: SONAR_JDBC_PASSWORD
           value: sonar
         ports:
         - containerPort: 9000
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "2Gi"
-            cpu: "1"
-
+        volumeMounts:
+        - name: sonarqube-storage
+          mountPath: /opt/sonarqube/data
+      volumes:
+      - name: sonarqube-storage
+        persistentVolumeClaim:
+          claimName: sonarqube-pvc
