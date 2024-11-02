@@ -24,3 +24,11 @@ spec:
           value: sonar
         ports:
         - containerPort: 9000
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+
