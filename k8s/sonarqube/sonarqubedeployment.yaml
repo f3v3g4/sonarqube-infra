@@ -16,20 +16,26 @@ spec:
     spec:
       containers:
       - name: sonarqube
-        image: sonarqube:latest
+        image: sonarqube:lts
+        ports:
+        - containerPort: 9000
         env:
         - name: SONAR_JDBC_URL
-          value: jdbc:postgresql://sonarqube-postgres:5432/sonar
+          value: jdbc:postgresql://postgres:5432/sonar
         - name: SONAR_JDBC_USERNAME
           value: sonar
         - name: SONAR_JDBC_PASSWORD
           value: sonar
-        ports:
-        - containerPort: 9000
-        volumeMounts:
-        - name: sonarqube-storage
-          mountPath: /opt/sonarqube/data
-      volumes:
-      - name: sonarqube-storage
-        persistentVolumeClaim:
-          claimName: sonarqube-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarqube
+spec:
+  type: NodePort
+  ports:
+  - port: 9000
+    targetPort: 9000
+    nodePort: 30000
+  selector:
+    app: sonarqube
