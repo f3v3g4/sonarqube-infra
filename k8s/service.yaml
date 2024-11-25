@@ -4,9 +4,10 @@ metadata:
   name: sonarqube
   namespace: sonarqube
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 9000
       targetPort: 9000
+      nodePort: 30000  # Puedes especificar un puerto NodePort o dejar que Kubernetes asigne uno automáticamente
   selector:
     app: sonarqube
